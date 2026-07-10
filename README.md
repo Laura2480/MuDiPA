@@ -9,6 +9,18 @@ and group threads, aided by two pluggable AI backends:
 - a **reasoning engine** — an LLM (Claude) that generates on-demand
   natural-language rationales for candidate links and relation labels.
 
+<p align="center"><img src="docs/images/interface.png" alt="MuDiPA annotation interface" width="100%"></p>
+
+<p align="center"><em>The MuDiPA interface: the dialogue list, the discourse graph with parser-suggested
+arcs and relation labels, the top-K relation ranking, and the reasoning engine's rationale (right).</em></p>
+
+<p align="center">
+  <img src="docs/images/subdialogue.png" alt="Sub-dialogue navigation" height="220">
+  &nbsp;&nbsp;
+  <img src="docs/images/multimodal.png" alt="Multimodal (video/audio/text) view" height="220">
+</p>
+<p align="center"><em>Sub-dialogue navigation (left) and the synchronized multimodal view (right).</em></p>
+
 🔗 **Live demo:** _<add deployed URL here — required for the EMNLP submission>_
 📹 **Screencast:** _<add video link here>_
 

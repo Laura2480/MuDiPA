@@ -122,6 +122,65 @@ def _vram_mb():
         return 0.0
 
 
+# ── Robust parse: tolerate + repair the off-format generation the parser sometimes
+# emits (especially out-of-domain), so /ddpe/parse ALWAYS returns a valid (parent,
+# relation) — relaxed extraction -> forced-bracket retry -> constrained scoring. ──
+def _extract_arc(line, target):
+    """Pull (parent, relation) from one generated line, tolerating missing [brackets]
+    and unquoted relations. Returns (parent_or_None, relation_or_'')."""
+    parent = None
+    for m in re.finditer(r"\d+", line):
+        v = int(m.group())
+        if 0 <= v < target:
+            parent = v
+            break
+    rm = re.search(r"'([^']+)'", line)
+    if rm:
+        rel = rm.group(1).strip()
+    else:                                    # relation not quoted -> match a known name
+        low = line.lower()
+        rel = next((r for r in DDPE_RELATIONS if r.lower() in low), "")
+    return parent, rel
+
+
+def _avg_logprob(model, tok, prefix_ids, cont_ids):
+    ids = torch.tensor([prefix_ids + cont_ids], device=model.device)
+    with torch.no_grad():
+        logp = torch.log_softmax(model(input_ids=ids).logits, dim=-1)
+    plen = len(prefix_ids)
+    return sum(logp[0, plen + j - 1, ids[0, plen + j]].item()
+               for j in range(len(cont_ids))) / max(1, len(cont_ids))
+
+
+def _prefix_ids(tok, spk, txt, target, parent=None):
+    dialogue = "\n".join(f"[{i}] {spk[i]}: {txt[i]}" for i in range(target + 1))
+    header = PROMPT.split("dialogue:")[0]
+    tail = f"[{parent}]:" if parent is not None else ""
+    return tok(f"{header}dialogue:\n{dialogue}\nlabel:\n[{target}]–>{tail}")["input_ids"]
+
+
+def _best_parent(model, tok, spk, txt, target, window=10):
+    """Constrained argmax over valid parents p<target of logp([p]:). Never malformed."""
+    pre = _prefix_ids(tok, spk, txt, target)
+    best, best_lp = max(0, target - 1), -1e9
+    for p in range(max(0, target - window), target):
+        lp = _avg_logprob(model, tok, pre, tok(f"[{p}]:", add_special_tokens=False)["input_ids"])
+        if lp > best_lp:
+            best_lp, best = lp, p
+    return best
+
+
+def _best_relation(model, tok, spk, txt, parent, target):
+    """Constrained argmax over the 16 relations of logp([t]–>[p]:'r')."""
+    pre = _prefix_ids(tok, spk, txt, target, parent)
+    best, best_lp = DDPE_RELATIONS[0], -1e9
+    for r in DDPE_RELATIONS:
+        lp = _avg_logprob(model, tok, pre, tok(f"'{r}'", add_special_tokens=False)["input_ids"])
+        if lp > best_lp:
+            best_lp, best = lp, r
+    return best
+
+
 def _load(dataset):
     dataset = (dataset or "stac").lower()
     adir = ADAPTER_DIRS.get(dataset)
@@ -332,23 +391,37 @@ def ddpe_parse():
             if not ok:
                 return jsonify({"error": msg}), 503
         model, tok = _state["model"], _state["tok"]
-        dialogue = "\n".join(f"[{i}] {spk[i]}: {txt[i]}" for i in range(target + 1))
         header = PROMPT.split("dialogue:")[0]                 # instruction + example
+        dialogue = "\n".join(f"[{i}] {spk[i]}: {txt[i]}" for i in range(target + 1))
         prompt = f"{header}dialogue:\n{dialogue}\nlabel:\n[{target}]–>"
-        inputs = tok(prompt, return_tensors="pt").to(model.device)
-        with torch.no_grad():
-            out = model.generate(**inputs, max_new_tokens=200, do_sample=False,
-                                  pad_token_id=tok.pad_token_id)
-        gen = tok.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
+
+        def _gen(p, n):
+            ii = tok(p, return_tensors="pt").to(model.device)
+            with torch.no_grad():
+                oo = model.generate(**ii, max_new_tokens=n, do_sample=False,
+                                    pad_token_id=tok.pad_token_id)
+            return tok.decode(oo[0][ii["input_ids"].shape[1]:], skip_special_tokens=True)
+
+        gen = _gen(prompt, 64)
+        parent, rel = _extract_arc(gen.strip().split("\n")[0], target)
+        repaired = None
+        if parent is None:                       # (1) retry forcing the parent bracket
+            g2 = "[" + _gen(prompt + "[", 40)
+            p2, r2 = _extract_arc(g2.strip().split("\n")[0], target)
+            if p2 is not None:
+                parent, gen, repaired = p2, g2, "forced-bracket"
+                rel = rel or r2
+        if parent is None:                       # (2) last resort: constrained scoring
+            parent = _best_parent(model, tok, spk, txt, target)
+            repaired = "scored-parent"
+        if not rel:                              # relation missing -> constrained scoring
+            rel = _best_relation(model, tok, spk, txt, parent, target)
+            repaired = (repaired + "+scored-rel") if repaired else "scored-rel"
     line = gen.strip().split("\n")[0]
-    pm = re.match(r"\s*\[(\d+)\]", line)
-    parent = int(pm.group(1)) if pm else None
     rm = re.search(r"'([^']+)'", line)
-    rel = (rm.group(1).strip() if rm
-           else re.sub(r"^\s*\[\d+\]\s*:?\s*", "", line).split(":")[0].strip())
     expl = (line[rm.end():].lstrip(": ").strip() if rm else "")[:600]
     valid = parent is not None and 0 <= parent < target
-    return jsonify({"target": target, "parent": parent, "valid": valid,
+    return jsonify({"target": target, "parent": parent, "valid": valid, "repaired": repaired,
                     "relation": rel, "explanation": expl, "engine": "ddpe", "raw": gen[:400]})
 
 

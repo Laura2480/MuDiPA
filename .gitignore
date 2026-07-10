@@ -1,0 +1,60 @@
+# ── Secrets (NEVER commit) ───────────────────────────────────────────────
+# .env.example currently holds a REAL working token in this checkout — keep it out.
+.env
+.env.*
+!.env.template
+*.key
+*.pem
+
+# ── Study data / participant records (PII) ───────────────────────────────
+db/
+*.db
+*.db-shm
+*.db-wal
+*.db.bak*
+
+# ── Corpora & media (licensed / large — obtain separately, see README) ────
+# Ignore everything under data/ EXCEPT the tiny synthetic sample.
+/data/*
+!/data/sample/
+# DDPE LoRA adapters (~161 MB) — download separately.
+ext/
+_firstaid.pdf
+
+# ── Python / venv / caches ───────────────────────────────────────────────
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# ── Run artifacts ────────────────────────────────────────────────────────
+logs/
+out/
+*.log
+scratchpad/
+
+# ── Paper (separate Overleaf git repo) ───────────────────────────────────
+paper/
+_paper_figures_localbak/
+_paper_main_localbak.tex
+*_localbak*
+
+# ── Research-only (NOT part of the tool; analysis/ holds licensed STAC gold) ─
+analysis/
+scripts/
+auxil/
+run_study.ps1
+.claude/
+docs/*STUDY*
+docs/*study*
+
+# ── Analysis scratch (temp outputs) ──────────────────────────────────────
+analysis/_*.out
+analysis/_*.err
+
+# ── OS / editor ──────────────────────────────────────────────────────────
+.idea/
+.DS_Store
+Thumbs.db

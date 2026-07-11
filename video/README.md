@@ -33,6 +33,13 @@ Edit the scene texts in `gen_audio.py`, rerun it, rebuild `narration_full.m4a`
 (pad+concat), and update `SCENE_SECS` in `record_demo.py` to the new durations.
 Swap voice via `VOICE` (e.g. `en-GB-SoniaNeural`) or trim time via `RATE="+8%"`.
 
+## Title + closing cards (`mudipa_demo_full.mp4`)
+`intro.html` (logo, objective, feature list, "now the demo") and `outro.html`
+(logo + "thank you") are rendered at 1920×1080 and concatenated around the demo:
+intro (8 s) + `mudipa_demo.mp4` + outro (4 s) → **`mudipa_demo_full.mp4`** (2:28, ≤ 2.5 min,
+MPEG4). This is the screencast referenced in the top-level README. Rebuild: screenshot the
+two HTML pages, then `ffmpeg` concat (silent AAC on the cards; short fades).
+
 ## Closing link overlay
 `record_demo.py` opens the export dropdown on the last scene; add the repo/live-demo
 URL as a lightweight text overlay in the final edit (or via an ffmpeg `drawtext`).

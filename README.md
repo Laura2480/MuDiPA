@@ -21,8 +21,13 @@ arcs and relation labels, the top-K relation ranking, and the reasoning engine's
 </p>
 <p align="center"><em>Sub-dialogue navigation (left) and the synchronized multimodal view (right).</em></p>
 
-🔗 **Live demo:** _<add deployed URL here — required for the EMNLP submission>_
-📹 **Screencast:** _<add video link here>_
+> **Availability.** MuDiPA is open-source and self-hostable — the full source is in this
+> repository and runs locally in a few commands (see **[Quick start](#quick-start)**). A
+> ready-to-run snapshot can be downloaded from GitHub via *Code ▸ Download ZIP* or a release
+> tarball; the annotation UI needs no special hardware.
+>
+> 📹 **Screencast (≤ 2.5 min):** [`video/mudipa_demo_full.mp4`](video/mudipa_demo_full.mp4)
+> &nbsp;·&nbsp; 🔗 **Live demo:** _optional deployed URL — add here once hosted._
 
 ---
 
@@ -117,6 +122,14 @@ data/               corpora, annotations, uploads (obtain corpora separately)
 
 See `.env.template`. **Do not commit `.env`** (it is gitignored).
 
+## Evaluation
+
+MuDiPA was evaluated in a within-subjects user study in which annotators completed STAC
+dialogues with and without assistance. Assistance improves relation-labelling F$_1$ and
+inter-annotator agreement and lowers perceived workload (NASA-TLX), at a modest cost in
+annotation time; the reasoning engine reliably flags mislabelled relations. Full results
+are reported in the paper, and the analysis scripts and aggregates live under `analysis/`.
+
 ## Citation
 
 ```bibtex
@@ -128,7 +141,7 @@ See `.env.template`. **Do not commit `.env`** (it is gitignored).
   year   = {2026}
 }
 ```
-correggi a volo in chat poi copio a mano
+
 ## License
 
 Code is released under the [MIT License](LICENSE). Bundled/downloaded corpora and

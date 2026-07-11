@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><style>
+  :root{
+    --accent:#577f72; --accent-sat:hsl(162,30%,42%); --ink:#374151;
+    --fg-2:#6b7280; --bg:#eef1ee; --card:#ffffff; --hair:#dbe2dd;
+    --display:'Source Serif 4',Georgia,'Palatino Linotype',serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px}
+  body{background:
+      radial-gradient(1200px 700px at 78% -8%, rgba(87,127,114,.10), transparent 60%),
+      linear-gradient(180deg,#f4f6f4,#e9ede9);
+    font-family:var(--display); color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow:hidden;}
+  .wrap{width:1500px}
+  /* wordmark */
+  .brand{position:relative; display:inline-flex; align-items:baseline; font-weight:700;
+    letter-spacing:.01em; line-height:1; user-select:none;}
+  .brand .b-co{color:var(--ink)} .brand .b-da{color:var(--accent-sat)}
+  .brand-arc{position:absolute; left:.40em; right:.18em; top:-.26em; height:.42em; overflow:visible}
+  .brand-arc path{fill:none; stroke:var(--accent-sat); stroke-width:1.6}
+  .brand-arc circle{fill:var(--accent-sat)}
+  .head{text-align:center; margin-bottom:34px}
+  .head .brand{font-size:150px}
+  .sub{font-size:33px; color:var(--fg-2); margin-top:26px; line-height:1.35; font-style:italic}
+  .obj{font-size:27px; color:var(--ink); line-height:1.5; text-align:center;
+    max-width:1280px; margin:0 auto 40px}
+  .obj b{color:var(--accent-sat)}
+  .feats{display:grid; grid-template-columns:1fr 1fr; gap:20px 42px; margin:0 40px}
+  .feat{display:flex; gap:20px; align-items:flex-start; background:var(--card);
+    border:1px solid var(--hair); border-radius:16px; padding:20px 24px;
+    box-shadow:0 1px 3px rgba(40,60,52,.05)}
+  .feat .dot{flex:0 0 auto; width:40px; height:40px; border-radius:11px;
+    background:rgba(87,127,114,.12); display:flex; align-items:center; justify-content:center; margin-top:2px}
+  .feat .dot svg{width:26px; height:14px; overflow:visible}
+  .feat .dot path{fill:none; stroke:var(--accent-sat); stroke-width:2}
+  .feat .dot circle{fill:var(--accent-sat)}
+  .feat h3{font-size:26px; color:var(--ink); margin-bottom:4px}
+  .feat p{font-size:21px; color:var(--fg-2); line-height:1.4}
+  .cta{text-align:center; margin-top:46px; font-size:34px; color:var(--accent-sat); font-weight:700}
+  .cta .ar{display:inline-block; margin-left:8px; transform:translateY(1px)}
+</style></head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <span class="brand">
+        <svg class="brand-arc" viewBox="0 0 48 12" preserveAspectRatio="none">
+          <path d="M3,11 C 3,2 45,2 45,11"/><circle cx="3" cy="11" r="2"/><circle cx="45" cy="11" r="2.4"/>
+        </svg>
+        <span class="b-co">MuDi</span><span class="b-da">PA</span>
+      </span>
+      <div class="sub">A Human-in-the-Loop AI-Assisted Platform for<br>Discourse-Graph Annotation in Multi-Party Dialogues</div>
+    </div>
+    <div class="obj">Annotating SDRT discourse structure in multi-party dialogue is slow and inconsistent.
+      MuDiPA keeps the <b>human in control</b> and pairs their judgment with AI assistance &mdash;
+      suggestions, rationales, and structure &mdash; to make the task faster and more reliable.</div>
+    <div class="feats">
+      <div class="feat"><div class="dot"><svg viewBox="0 0 48 12" preserveAspectRatio="none"><path d="M3,11 C 3,2 45,2 45,11"/><circle cx="3" cy="11" r="2"/><circle cx="45" cy="11" r="2.4"/></svg></div>
+        <div><h3>Suggestion engine</h3><p>Proposes the most likely attachment and relation label, each with a confidence score.</p></div></div>
+      <div class="feat"><div class="dot"><svg viewBox="0 0 48 12" preserveAspectRatio="none"><path d="M3,11 C 3,2 45,2 45,11"/><circle cx="3" cy="11" r="2"/><circle cx="45" cy="11" r="2.4"/></svg></div>
+        <div><h3>Reasoning engine</h3><p>Vets a chosen relation against its definition &mdash; holds or doesn&rsquo;t &mdash; with a rationale.</p></div></div>
+      <div class="feat"><div class="dot"><svg viewBox="0 0 48 12" preserveAspectRatio="none"><path d="M3,11 C 3,2 45,2 45,11"/><circle cx="3" cy="11" r="2"/><circle cx="45" cy="11" r="2.4"/></svg></div>
+        <div><h3>Sub-dialogue navigation</h3><p>Groups the dialogue into coherent conversational threads, each explainable on demand.</p></div></div>
+      <div class="feat"><div class="dot"><svg viewBox="0 0 48 12" preserveAspectRatio="none"><path d="M3,11 C 3,2 45,2 45,11"/><circle cx="3" cy="11" r="2"/><circle cx="45" cy="11" r="2.4"/></svg></div>
+        <div><h3>Multimodal &amp; extensible</h3><p>Synchronized video, audio and text; multiple corpora and pluggable back-ends.</p></div></div>
+    </div>
+    <div class="cta">Now, let&rsquo;s see the demo<span class="ar">&rarr;</span></div>
+  </div>
+</body></html>

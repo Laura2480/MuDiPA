@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><style>
+  :root{
+    --accent:#577f72; --accent-sat:hsl(162,30%,42%); --ink:#374151;
+    --fg-2:#6b7280; --display:'Source Serif 4',Georgia,'Palatino Linotype',serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1920px;height:1080px}
+  body{background:
+      radial-gradient(1200px 800px at 50% 20%, rgba(87,127,114,.12), transparent 60%),
+      linear-gradient(180deg,#f4f6f4,#e9ede9);
+    font-family:var(--display); color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow:hidden;}
+  .wrap{text-align:center}
+  .brand{position:relative; display:inline-flex; align-items:baseline; font-weight:700;
+    letter-spacing:.01em; line-height:1; user-select:none; font-size:190px}
+  .brand .b-co{color:var(--ink)} .brand .b-da{color:var(--accent-sat)}
+  .brand-arc{position:absolute; left:.40em; right:.18em; top:-.26em; height:.42em; overflow:visible}
+  .brand-arc path{fill:none; stroke:var(--accent-sat); stroke-width:1.5}
+  .brand-arc circle{fill:var(--accent-sat)}
+  .thanks{font-size:52px; color:var(--fg-2); margin-top:64px; font-style:italic; letter-spacing:.01em}
+  .rule{width:120px; height:3px; background:var(--accent-sat); opacity:.5; margin:44px auto 0; border-radius:2px}
+</style></head>
+<body>
+  <div class="wrap">
+    <span class="brand">
+      <svg class="brand-arc" viewBox="0 0 48 12" preserveAspectRatio="none">
+        <path d="M3,11 C 3,2 45,2 45,11"/><circle cx="3" cy="11" r="2"/><circle cx="45" cy="11" r="2.4"/>
+      </svg>
+      <span class="b-co">MuDi</span><span class="b-da">PA</span>
+    </span>
+    <div class="rule"></div>
+    <div class="thanks">Thank you for your attention</div>
+  </div>
+</body></html>

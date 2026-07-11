@@ -476,7 +476,8 @@ def ddpe_score():
         r["score"] = round(e / Z, 3)
     rows.sort(key=lambda r: -r["score"])
     return jsonify({"target": target,
-                    "links": [{"source": r["source"], "score": r["score"]} for r in rows],
+                    "links": [{"source": r["source"], "score": r["score"],
+                               "lp": round(r["lp"], 5)} for r in rows],
                     "engine": "ddpe"})
 
 
@@ -528,7 +529,8 @@ def ddpe_score_rel():
     mx = max(lps, default=0.0)
     exps = [pow(2.718281828, lp - mx) for lp in lps]
     Z = sum(exps) or 1.0
-    out = sorted([{"relation": rels[i], "score": round(exps[i] / Z, 3)} for i in range(len(rels))],
+    out = sorted([{"relation": rels[i], "score": round(exps[i] / Z, 3),
+                   "lp": round(lps[i], 5)} for i in range(len(rels))],
                  key=lambda r: -r["score"])
     return jsonify({"source": source, "target": target, "relations": out, "engine": "ddpe"})
 

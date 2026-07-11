@@ -1,0 +1,14 @@
+[s1_intro] MuDiPA is a human-in-the-loop platform for annotating discourse structure in multi-party dialogue. It lays each utterance on a pan-and-zoom canvas and drafts a discourse graph, with labelled relations between the utterances.
+
+[s2_link] To build the graph, the annotator selects an utterance and the suggestion engine proposes its most likely attachment, with a confidence score. A single click accepts it.
+
+[s3_relation] The link is then labelled: the codebook defines each SDRT relation, and the parser ranks the likely labels for the annotator to choose.
+
+[s4_reasoning] The reasoning engine then vets that choice against the relation's own definition. It is given a single relation and asked only whether it holds. Here it finds that Elaboration does not hold, since yep plenty answers the question rather than adding any detail. Across our study, it caught such mislabellings correctly in over four out of five cases.
+
+[s_sub] MuDiPA also groups the dialogue into sub-dialogues, the separate conversational threads running through it, and can explain each one.
+
+[s5_multimodal] MuDiPA is not limited to text. For multimodal corpora, video, audio, and text stay synchronized: selecting an utterance seeks the player to that moment, so every unit is annotated in its original context.
+
+[s6_close] MuDiPA supports multiple corpora and pluggable parser and language-model back-ends. Try the live demo and the code at the link on screen.
+

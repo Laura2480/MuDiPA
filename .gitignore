@@ -58,3 +58,10 @@ analysis/_*.err
 .idea/
 .DS_Store
 Thumbs.db
+
+# ── Demo video: throwaway capture + intermediates (keep scripts, final mp4, narration) ──
+video/raw/
+video/frames/
+video/_*
+video/audio/_*
+video/audio/*_pad.m4a

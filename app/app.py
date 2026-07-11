@@ -67,7 +67,7 @@ _load_env()
 
 from relations import (
     CANONICAL_RELATIONS_EXT, normalize_relation, RELATION_DEFS,
-    build_relation_defs, DATASET_RELATIONS, _REL_DEF,
+    build_relation_defs, DATASET_RELATIONS, _REL_DEF, relation_def,
 )
 from corpora import (DATASETS, DATA_DIR, get_prompts, find_consecutive_groups,
                        merge_dialogue, load_records)
@@ -1565,20 +1565,26 @@ def _egm_build(edus, speakers, p, t, chosen_rel=None, prior_arcs=None, hint=None
             f"(parent [{p}] {speakers[p]}: \"{edus[p]}\"  ->  "
             f"child [{t}] {speakers[t]}: \"{edus[t]}\").")
     if chosen_rel:
+        rel_def = relation_def(chosen_rel) or f"{chosen_rel}: (no gloss available)"
         user += (
-            f"\n\nProposed relation for this arc: '{chosen_rel}'. Judge THIS relation, "
-            f"starting from it. If '{chosen_rel}' holds, set \"suggestion_verdict\":\"agree\", "
-            f"keep \"relation\"='{chosen_rel}', and explain why it fits. "
-            f"If '{chosen_rel}' does NOT hold, set \"suggestion_verdict\":\"disagree\" and write "
-            f"\"relation_explanation\" in two steps: (1) FIRST explain why '{chosen_rel}' does not "
-            f"hold here; (2) THEN name the relation you consider correct from the inventory and "
-            f"explain why it fits — set \"relation\" to that relation. Do not lead with your alternative.")
+            f"\n\nProposed relation for this arc: '{chosen_rel}'.\n"
+            f"Definition — {rel_def}\n\n"
+            f"Decide ONLY whether '{chosen_rel}' holds for [{t}]->[{p}], judging it strictly "
+            f"against this definition and the actual wording. Keep \"relation\"='{chosen_rel}'. "
+            f"If '{chosen_rel}' holds, set \"suggestion_verdict\":\"agree\" and explain in "
+            f"\"relation_explanation\" why it fits the definition. "
+            f"If '{chosen_rel}' does NOT hold, set \"suggestion_verdict\":\"disagree\" and explain "
+            f"in \"relation_explanation\" why it does not fit the definition. "
+            f"You are given this one relation and its definition only — do NOT name, propose, "
+            f"or compare against any other relation.")
     else:
         user += ("\n\nNo relation is proposed — analyse the LINK only: does [t] attach "
                  "to [p]? Set \"attaches\" and explain in \"link_explanation\" why the "
                  "link holds or does not. Set \"suggestion_verdict\":\"none\".")
-    # Inject pre-generated scaffold to ground reasoning in this specific arc
-    if hint:
+    # Inject pre-generated scaffold to ground reasoning in this specific arc.
+    # NOT for relation verdicts: the scaffold names likely/alternative relations, which
+    # would leak the inventory — the engine must reason from the single given definition.
+    if hint and not chosen_rel:
         scaffold = hint.get("scaffold", "")
         key_dist = hint.get("key_distinction", "")
         likely = hint.get("likely_relations", [])
@@ -1591,7 +1597,7 @@ def _egm_build(edus, speakers, p, t, chosen_rel=None, prior_arcs=None, hint=None
             parts.append(f"Reasoning scaffold: {scaffold}")
         if parts:
             user += "\n\n[Context hint — use to ground your explanation but do not quote directly]\n" + "\n".join(parts)
-    return SYS_CLAUDE_EGM.replace("__RELDEFS__", RELATION_DEFS), user
+    return SYS_CLAUDE_EGM, user
 
 
 def _egm_contract(obj, p, engine, chosen_rel=None, rel_source=None):
@@ -1711,26 +1717,20 @@ Apostrophes may appear ONLY inside the relation name in the header (e.g. :'Elabo
 Example: [3]<no sorry> is a direct negative answer to [0]<do anyone have clay or wheat>.
 
 Your task depends on what is provided:
- - RELATION analysis (a relation is proposed): judge whether the PROPOSED relation holds
-   for [t]->[p]. Always write "relation_explanation" so it addresses the PROPOSED relation
-   FIRST — the annotator asked about THAT relation, so start from it.
-   If it DOES hold: set "suggestion_verdict":"agree", keep "relation" as the proposed one,
-   and explain why the proposed relation fits.
-   If it does NOT hold: set "suggestion_verdict":"disagree". In "relation_explanation",
-   FIRST explain why the PROPOSED relation does not hold (name it), THEN propose the
-   relation you consider correct and explain why it fits; set "relation" to that
-   alternative. Do NOT lead with your alternative.
+ - RELATION analysis (ONE proposed relation and its definition are given): decide only
+   whether that single relation holds for [t]->[p], judging it strictly against the
+   definition you are given and the actual wording. Write "relation_explanation" about
+   the PROPOSED relation only, and keep "relation" exactly as proposed.
+   If it DOES hold: set "suggestion_verdict":"agree" and explain why it fits the definition.
+   If it does NOT hold: set "suggestion_verdict":"disagree" and explain why it does not fit
+   the definition. You are shown a single relation and its definition and nothing else — do
+   NOT name, propose, or compare against any other relation, and do NOT rely on any inventory.
  - LINK analysis (no relation proposed): judge whether [t] attaches to [p]. Set
    "attaches" and explain in "link_explanation" why the link holds or does not.
 
-%s
-
-SDRT relations:
-__RELDEFS__
-
 Output ONLY one JSON object, no prose around it:
 {"attaches":bool,"link_confidence":1-5,"link_explanation":str,"relation":str,
-"relation_explanation":str,"fit":1-5,"suggestion_verdict":"agree"|"disagree"|"none"}""" % GENERAL_ERROR_CAUSES
+"relation_explanation":str,"fit":1-5,"suggestion_verdict":"agree"|"disagree"|"none"}"""
 
 
 def _claude_explain_cli(edus, speakers, p, t, chosen_rel=None, prior_arcs=None, hint=None,

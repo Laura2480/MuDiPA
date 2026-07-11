@@ -104,6 +104,21 @@ def build_relation_defs(dataset=None):
 
 RELATION_DEFS = build_relation_defs("stac")
 
+
+def relation_def(rel):
+    """One-line codebook definition for a SINGLE relation (case-insensitive), or ''.
+    The reasoning engine judges one proposed relation against ITS OWN definition,
+    without being shown the rest of the inventory."""
+    if not rel:
+        return ""
+    r = RELATION_NORMALIZE.get(rel, rel)
+    if r in _REL_DEF:
+        return f"{r}: {_REL_DEF[r]}"
+    for k, v in _REL_DEF.items():
+        if k.lower() == str(rel).lower():
+            return f"{k}: {v}"
+    return ""
+
 CANONICAL_RELATIONS_EXT = {
     "QAP", "Elaboration", "Continuation", "Acknowledgement", "Q-Elab",
     "Comment", "Contrast", "Alternation", "Parallel", "Correction",

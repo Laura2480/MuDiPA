@@ -120,12 +120,13 @@ See `.env.template`. **Do not commit `.env`** (it is gitignored).
 ## Citation
 
 ```bibtex
-@inproceedings{mudipa2026,
-  title     = {MuDiPA: A Human-in-the-Loop AI-Assisted Platform for Discourse
-               Graph Annotation in Multi-party Dialogues},
-  author    = {<authors>},
-  booktitle = {Proceedings of EMNLP 2026: System Demonstrations},
-  year      = {2026}
+@article{mudipa2026,
+  title   = {MuDiPA: A Human-in-the-Loop AI-Assisted Platform for Discourse-Graph
+             Annotation in Multi-party Dialogues},
+  author  = {<authors>},
+  journal = {Topoi},
+  note    = {Submitted},
+  year    = {2026}
 }
 ```
 

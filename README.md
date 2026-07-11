@@ -121,15 +121,14 @@ See `.env.template`. **Do not commit `.env`** (it is gitignored).
 
 ```bibtex
 @article{mudipa2026,
-  title   = {MuDiPA: A Human-in-the-Loop AI-Assisted Platform for Discourse-Graph
-             Annotation in Multi-party Dialogues},
-  author  = {<authors>},
-  journal = {Topoi},
-  note    = {Submitted},
-  year    = {2026}
+  title  = {MuDiPA: A Human-in-the-Loop AI-Assisted Platform for Discourse-Graph
+            Annotation in Multi-party Dialogues},
+  author = {De Santis, Laura and Cimino, Gaetano and Feldhus, Nils and Carenini, Giuseppe and Deufemia, Vincenzo},
+  note   = {Submitted to EMNLP},
+  year   = {2026}
 }
 ```
-
+correggi a volo in chat poi copio a mano
 ## License
 
 Code is released under the [MIT License](LICENSE). Bundled/downloaded corpora and

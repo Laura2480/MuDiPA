@@ -27,7 +27,7 @@ arcs and relation labels, the top-K relation ranking, and the reasoning engine's
 > tarball; the annotation UI needs no special hardware.
 >
 > 📹 **Screencast (≤ 2.5 min):** [`video/mudipa_demo_full.mp4`](video/mudipa_demo_full.mp4)
-> &nbsp;·&nbsp; 🔗 **Live demo:** _optional deployed URL — add here once hosted._
+> &nbsp;·&nbsp; 🔗 **Live demo:** <https://f766-193-205-162-89.ngrok-free.app> _(live-tunnelled instance; if unreachable, run locally via Quick start below)._
 
 ---
 

@@ -1,12 +1,5 @@
 # MuDiPA — System Reference
 
-> Companion to *"MuDiPA: A Human-in-the-Loop Platform for AI-Assisted Dialogue Discourse Parsing
-> Annotation."* This document is written to feed the paper's **System** treatment: it uses the
-> paper's terminology, maps each claimed contribution/feature to its implementation, and
-> documents the recent extensions that realize the paper's *"newer multimodal and multilingual
-> datasets."* Scope is the app **as it actually runs**; genuinely inactive code is in the
-> appendix.
-
 MuDiPA is a web-based **human-in-the-loop** platform for **discourse graph** annotation in
 multi-party dialogues. Annotators build the graph over elementary discourse units (EDUs) —
 attachment **arcs** and **relation** labels — assisted by two **pluggable AI backends** whose
@@ -100,7 +93,7 @@ inactive fallbacks. Discovery: `GET /api/engines`; activation: `POST /api/engine
 
 ---
 
-## 5. Datasets & frameworks  *(realizing the paper's "newer multimodal and multilingual")*
+## 5. Datasets & frameworks 
 
 ### 5.1 Dataset loader registry
 `corpora.py` decouples datasets behind a loader registry (`register_loader`, `load_records`).
@@ -114,15 +107,12 @@ its **original gold** (`orig_label`) and its **native relation inventory** (RST/
 SDRT — no forced mapping to SDRT). Licence-redacted corpora (PTB/WSJ, underscore-masked text) are
 excluded; `erst` is folded into `rst`; undirected relations default to `arg1→arg2`.
 
-### 5.3 Multimodal — `draddp` (Friends)
+### 5.3 Multimodal 
 Real *Friends* dialogues from **MELD**: per-utterance **speaker + timestamps → per-EDU `clip`**,
 per-utterance **video/audio → per-EDU `clip_src`**. Each EDU's own clip (video+audio, or audio)
 renders **on its graph node**, aligned to its timestamp — the paper's *"multimodal panel with
 per-EDU timestamp seeking,"* taken to per-EDU segments. Dialogue-level **waveform peaks** are
-precomputed (`precompute_media.py`; ffmpeg via imageio-ffmpeg for non-WAV/video). Discourse arcs
-are **drafted by the suggestion engine** (`generate_meld_parse.py`: `/ddpe/score` best parent +
-right-frontier + `/ddpe/score_rel` + structural rules — a full parse, not a chain); the human
-refines them. Framework = SDRT.
+precomputed (`precompute_media.py`; ffmpeg via imageio-ffmpeg for non-WAV/video).
 
 ---
 

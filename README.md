@@ -9,7 +9,7 @@ and group threads, aided by two pluggable AI backends:
 - a **reasoning engine** — an LLM (Claude) that generates on-demand
   natural-language rationales for candidate links and relation labels.
 
-<h2 align="center">▶️ <a href="https://af2c-193-205-162-89.ngrok-free.app/">Try the live MuDiPA demo</a></h2>
+<h2 align="center">▶️ <a href="https://90af-193-205-162-89.ngrok-free.app">Try the live MuDiPA demo</a></h2>
 <p align="center"><sub>Live-tunnelled instance · if it is unreachable, run it locally via <a href="#quick-start">Quick&nbsp;start</a>.</sub></p>
 
 <p align="center">
@@ -35,7 +35,7 @@ arcs and relation labels, the top-K relation ranking, and the reasoning engine's
 > tarball; the annotation UI needs no special hardware.
 >
 > 📹 **Screencast (≤ 2.5 min):** [`video/mudipa_demo_full.mp4`](video/mudipa_demo_full.mp4)
-> &nbsp;·&nbsp; 🔗 **Live demo:** <https://af2c-193-205-162-89.ngrok-free.app/> _(live-tunnelled instance; if unreachable, run locally via Quick start below)._
+> &nbsp;·&nbsp; 🔗 **Live demo:** <https://90af-193-205-162-89.ngrok-free.app> _(live-tunnelled instance; if unreachable, run locally via Quick start below)._
 
 ---
 
